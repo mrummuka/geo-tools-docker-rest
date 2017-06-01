@@ -1,0 +1,51 @@
+host: "0.0.0.0"
+port: 9900
+pretty_json: true
+endpoints:
+  -
+    path: "/info"
+    methods:
+      GET:
+        type: "info"
+  -
+# commented gid query-params usage and replaced with url params
+#   path: "/geo/gid"
+    path: "/geo/gid/{gid:GC[A-Z0-9]+}"
+    methods:
+      GET:
+        query_params:
+          return_params: false
+          params:
+#          -
+#            name: "gid"
+#            regexp: "^GC[A-Z0-9]+$"
+#            default: "GC74NPG"
+          -
+            name: "format"
+            regexp: "^[A-Z0-9a-z_]+$"
+            default: "unicsv"
+        type: "shell"
+        config:
+          single_result: 0
+          output: "raw"
+          commands:
+            -
+              chdir: "/tmp"
+#              command: "geo-gid -o {{.query.format}} {{.query.gid}}"
+              command: "geo-gid -o {{.query.format}} {{.url.gid}}"
+              format: "text"
+              return_command: false
+  -
+    path: "/geo/gidhtml/{gid:GC[A-Z0-9]+}"
+    methods:
+      GET:
+        type: "shell"
+        config:
+          single_result: 0
+          output: "raw"
+          commands:
+            -
+              chdir: "/tmp"
+              command: "geo-gid -H /tmp {{.url.gid}}>/dev/null && cat /tmp/{{.url.gid}}.html"
+              format: "text"
+              return_command: false
