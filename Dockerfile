@@ -39,7 +39,7 @@ RUN apt-get update && apt-get install -y \
  && ln -s WherigoTools/extra/unluac_2015_06_13.jar .
  RUN echo "deb http://ftp.us.debian.org/debian testing main contrib non-free" >/etc/apt/sources.list \
  && apt-get update \
- && apt-get install -y -t testing golang-go \
+ && apt-get install -y -t testing gpsbabel golang-go \
  && go get github.com/phonkee/goexpose \
  && apt-get purge -y --auto-remove wget build-essential make gcc git zip # golang-go
 # Add geotools installed to /root/bin to path
